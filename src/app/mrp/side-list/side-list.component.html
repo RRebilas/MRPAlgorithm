@@ -1,12 +1,12 @@
-<mat-expansion-panel hideToggle>
-  <mat-expansion-panel-header>
-    <mat-panel-title>Poziom 0</mat-panel-title>
+<mat-expansion-panel class="expansion-panel" hideToggle *ngFor="let level of levels">
+  <mat-expansion-panel-header class="expansion-header">
+    <mat-panel-title>Poziom {{ level }}</mat-panel-title>
   </mat-expansion-panel-header>
-  <app-list></app-list>
-</mat-expansion-panel>
-<mat-expansion-panel hideToggle>
-  <mat-expansion-panel-header>
-    <mat-panel-title>Poziom 1</mat-panel-title>
-  </mat-expansion-panel-header>
-  <!-- <app-list></app-list> -->
+  <mat-action-list>
+    <ng-container *ngFor="let product of data">
+      <button mat-list-item *ngIf="level == product.level">
+        {{ product.name }}
+      </button>
+    </ng-container>
+  </mat-action-list>
 </mat-expansion-panel>

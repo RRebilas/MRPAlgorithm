@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SideListComponent } from './side-list.component';
 
 describe('SideListComponent', () => {
@@ -8,9 +11,14 @@ describe('SideListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SideListComponent ]
-    })
-    .compileComponents();
+      declarations: [SideListComponent],
+      imports: [
+        MatExpansionModule,
+        MatListModule,
+        MatTableModule,
+        BrowserAnimationsModule,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

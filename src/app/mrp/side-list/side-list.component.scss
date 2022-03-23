@@ -1,3 +1,18 @@
 .expansion-panel {
   border-radius: 0;
 }
+.mat-expansion-panel:hover {
+  background-color: #c31bde;
+}
+.mat-expanded {
+  background-color: #6f0f7f;
+}
+.ng-star-inserted {
+  border-bottom: solid 1px gray;
+}
+.ng-star-inserted:hover {
+  border-bottom: solid 1px #a717be;
+}
+::ng-deep .mat-expansion-panel-body {
+  padding: 0 !important;
+}

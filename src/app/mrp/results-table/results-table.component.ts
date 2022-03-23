@@ -54,6 +54,7 @@ const ELEMENT_DATA: MrpRecord[] = [
   styleUrls: ['./results-table.component.scss'],
 })
 export class ResultsTableComponent {
+
   displayedColumns: string[] = [
     'mrp-week',
     'mrp-grossRequirements',

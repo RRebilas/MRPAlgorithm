@@ -1,0 +1,41 @@
+:host {
+  width: 40vw;
+}
+
+.demo-table {
+  width: 100%;
+}
+
+.demo-button-container {
+  padding-bottom: 16px;
+}
+
+.demo-button + .demo-button {
+  margin-left: 8px;
+}
+
+.mat-header-cell,
+.mat-cell {
+  text-align: center;
+}
+
+.mat-column-week {
+  width: 17%;
+}
+
+.mat-column-star {
+  width: 17%;
+}
+
+mat-icon {
+  cursor: pointer;
+}
+
+.demand-container {
+  .demand {
+    width: 50%;
+    input {
+      text-align: center;
+    }
+  }
+}

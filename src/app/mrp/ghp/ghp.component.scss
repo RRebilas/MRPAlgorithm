@@ -1,0 +1,53 @@
+:host {
+  width: 45rem;
+}
+
+.ghp-table {
+  width: 100%;
+}
+
+.demo-button-container {
+  padding-bottom: 16px;
+}
+
+.demo-button + .demo-button {
+  margin-left: 8px;
+}
+
+.mat-header-cell,
+.mat-cell {
+  text-align: center;
+}
+
+.mat-column-week {
+  width: 15%;
+}
+
+.mat-column-demand {
+  width: 40%;
+}
+
+.mat-column-production {
+  width: 40%;
+}
+
+mat-icon {
+  cursor: pointer;
+}
+
+.demand-container {
+  .demand {
+    input {
+      text-align: center;
+    }
+  }
+}
+
+.tools-section {
+  display: flex;
+  height: 4rem;
+  justify-content: space-between;
+  padding-top: 2rem;
+  color: white;
+  align-items: center;
+}

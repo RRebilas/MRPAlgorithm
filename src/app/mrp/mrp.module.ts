@@ -1,8 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
+import { GhpComponent } from './ghp/ghp.component';
 import { MainComponent } from './main/main.component';
 import { ResultsTableComponent } from './results-table/results-table.component';
 import { ListElementComponent } from './side-list/list-element/list-element.component';
@@ -16,8 +21,18 @@ import { SideListComponent } from './side-list/side-list.component';
     ListElementComponent,
     ListComponent,
     ResultsTableComponent,
+    GhpComponent,
   ],
-  imports: [CommonModule, MatExpansionModule, MatListModule, MatTableModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    MatExpansionModule,
+    MatListModule,
+    MatTableModule,
+    MatIconModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
   exports: [MainComponent],
 })
 export class MrpModule {}

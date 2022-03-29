@@ -1,51 +1,61 @@
-<mat-table [dataSource]="dataSource" class="mat-elevation-z8 mrp-table">
-  <ng-container matColumnDef="mrp-week">
-    <mat-header-cell *matHeaderCellDef>Okres</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{ element.week }}</mat-cell>
-  </ng-container>
+<ng-container *ngIf="dataSource$ | async as dataSource">
+  <ng-container *ngIf="dataSource.length !== 0">
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8 mrp-table">
+      <ng-container matColumnDef="mrp-week">
+        <mat-header-cell *matHeaderCellDef>Okres</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.week }}</mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="mrp-grossRequirements">
-    <mat-header-cell *matHeaderCellDef
-      >Całkowite zapotrzebowanie</mat-header-cell
-    >
-    <mat-cell *matCellDef="let element">{{
-      element.grossRequirement
-    }}</mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="mrp-grossRequirements">
+        <mat-header-cell *matHeaderCellDef
+          >Całkowite zapotrzebowanie</mat-header-cell
+        >
+        <mat-cell *matCellDef="let element">{{
+          element.grossRequirement
+        }}</mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="mrp-scheduled">
-    <mat-header-cell *matHeaderCellDef>Planowane przyjęcia</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{ element.scheduled }}</mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="mrp-scheduled">
+        <mat-header-cell *matHeaderCellDef>Planowane przyjęcia</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.scheduled }}</mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="mrp-available">
-    <mat-header-cell *matHeaderCellDef>Przewidywane na stanie</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{ element.available }}</mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="mrp-available">
+        <mat-header-cell *matHeaderCellDef
+          >Przewidywane na stanie</mat-header-cell
+        >
+        <mat-cell *matCellDef="let element">{{ element.available }}</mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="mrp-nettRequirements">
-    <mat-header-cell *matHeaderCellDef>Zapotrzebowanie netto</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{
-      element.nettRequirements
-    }}</mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="mrp-nettRequirements">
+        <mat-header-cell *matHeaderCellDef
+          >Zapotrzebowanie netto</mat-header-cell
+        >
+        <mat-cell *matCellDef="let element">{{
+          element.nettRequirements
+        }}</mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="mrp-plannedOrderReceipts">
-    <mat-header-cell *matHeaderCellDef>Planowane zamówienia</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{
-      element.plannedOrderReceipts
-    }}</mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="mrp-plannedOrderReceipts">
+        <mat-header-cell *matHeaderCellDef
+          >Planowane zamówienia</mat-header-cell
+        >
+        <mat-cell *matCellDef="let element">{{
+          element.plannedOrderReceipts
+        }}</mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="mrp-plannedOrderRelease">
-    <mat-header-cell *matHeaderCellDef
-      >Planowane przyjęcie zamówień</mat-header-cell
-    >
-    <mat-cell *matCellDef="let element">{{
-      element.plannedOrderRelease
-    }}</mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="mrp-plannedOrderRelease">
+        <mat-header-cell *matHeaderCellDef
+          >Planowane przyjęcie zamówień</mat-header-cell
+        >
+        <mat-cell *matCellDef="let element">{{
+          element.plannedOrderRelease
+        }}</mat-cell>
+      </ng-container>
 
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-</mat-table>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+  </ng-container>
+</ng-container>

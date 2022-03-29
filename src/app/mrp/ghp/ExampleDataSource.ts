@@ -1,5 +1,5 @@
 import { DataSource } from '@angular/cdk/collections';
-import { Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface PeriodicElement {
   week: number;
@@ -9,7 +9,7 @@ export interface PeriodicElement {
 }
 
 export class ExampleDataSource extends DataSource<PeriodicElement> {
-  private _dataStream = new ReplaySubject<PeriodicElement[]>();
+  private _dataStream = new BehaviorSubject<PeriodicElement[]>([]);
 
   constructor(initialData: PeriodicElement[]) {
     super();
@@ -26,5 +26,9 @@ export class ExampleDataSource extends DataSource<PeriodicElement> {
 
   setData(data: PeriodicElement[]) {
     this._dataStream.next(data);
+  }
+
+  get data() {
+    return this._dataStream.getValue();
   }
 }

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Observable, switchMap } from 'rxjs';
+import { GhpFormService } from '../services/ghp-form.service';
+import { GhpService } from '../services/ghp.service';
+import { MrpService } from '../services/mrp.service';
 import { ExampleDataSource, PeriodicElement } from './ExampleDataSource';
-
-export let ELEMENT_DATA: PeriodicElement[] = [
-  { week: 1, demand: 5, available: 15 },
-];
 
 @Component({
   selector: 'app-ghp',
@@ -12,42 +11,40 @@ export let ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./ghp.component.scss'],
 })
 export class GhpComponent implements OnInit {
-  displayedColumns: string[] = ['week', 'demand', 'production', 'available'];
-
-  dataToDisplay = [...ELEMENT_DATA];
-
+  displayedColumns: string[] = ['week', 'demand', 'production'];
+  dataToDisplay: PeriodicElement[] = [];
   dataSource = new ExampleDataSource(this.dataToDisplay);
-
-  demand = new FormControl(0, [Validators.min(0)]);
-  inStock = new FormControl(0, [Validators.min(0)]);
-
   currentWeek: number | undefined;
+  formGroup = this._ghpFormService.ghpForm;
+  totalDemand$: Observable<number[]> | undefined;
+
+  constructor(
+    private readonly _ghpFormService: GhpFormService,
+    private readonly _ghpService: GhpService,
+    private readonly _mrpService: MrpService
+  ) {}
 
   ngOnInit() {
-    this.demand.valueChanges.subscribe((week) => {
-      ELEMENT_DATA = ELEMENT_DATA.map((el) =>
-        el.week === this.currentWeek ? { ...el, demand: parseInt(week) } : el
-      );
-      console.log(ELEMENT_DATA);
-    });
+    this.formGroup.valueChanges
+      .pipe(switchMap((val) => this._ghpService.calculateGhp(val)))
+      .subscribe((val) => this._mrpService.setDemand(val));
   }
 
   addData() {
+    const week = this.dataToDisplay.length + 1;
     const element: PeriodicElement = {
-      week: this.dataToDisplay.length + 1,
+      week,
       demand: 0,
       available: 0,
     };
     this.dataToDisplay = [...this.dataToDisplay, element];
     this.dataSource.setData(this.dataToDisplay);
+    this._ghpFormService.addGhpRecord(week);
   }
 
   removeData() {
     this.dataToDisplay = this.dataToDisplay.slice(0, -1);
     this.dataSource.setData(this.dataToDisplay);
-  }
-
-  selectWeek(week: number) {
-    this.currentWeek = week;
+    this._ghpFormService.removeGhpRecord(this.dataToDisplay.length - 1);
   }
 }

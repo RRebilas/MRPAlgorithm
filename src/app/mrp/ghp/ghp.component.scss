@@ -1,8 +1,8 @@
 :host {
-  width: 40vw;
+  width: 45rem;
 }
 
-.demo-table {
+.ghp-table {
   width: 100%;
 }
 
@@ -20,11 +20,15 @@
 }
 
 .mat-column-week {
-  width: 17%;
+  width: 15%;
 }
 
-.mat-column-star {
-  width: 17%;
+.mat-column-demand {
+  width: 40%;
+}
+
+.mat-column-production {
+  width: 40%;
 }
 
 mat-icon {
@@ -33,9 +37,17 @@ mat-icon {
 
 .demand-container {
   .demand {
-    width: 50%;
     input {
       text-align: center;
     }
   }
+}
+
+.tools-section {
+  display: flex;
+  height: 4rem;
+  justify-content: space-between;
+  padding-top: 2rem;
+  color: white;
+  align-items: center;
 }

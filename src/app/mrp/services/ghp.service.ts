@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 interface GHPRecord {
   demand: number;
@@ -29,7 +29,7 @@ export class GhpService {
     this._totalDemand.next(demand);
   }
 
-  calculateGhp(data: FormObject): Observable<number[]> {
+  calculateAvailable(data: FormObject): Observable<number[]> {
     const totalDemand: GHPRecord[] = [];
     data.ghpRecords.reduce(
       (prev, curr) => {
@@ -41,5 +41,9 @@ export class GhpService {
     );
     this.totalDemand = totalDemand.map((record) => record.demand);
     return this.totalDemand$;
+  }
+
+  calculateTotalDemand(data: FormObject): Observable<number[]> {
+    return of();
   }
 }

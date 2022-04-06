@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, switchMap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 import { GhpFormService } from '../services/ghp-form.service';
 import { GhpService } from '../services/ghp.service';
 import { MrpService } from '../services/mrp.service';
@@ -11,12 +11,13 @@ import { ExampleDataSource, PeriodicElement } from './ExampleDataSource';
   styleUrls: ['./ghp.component.scss'],
 })
 export class GhpComponent implements OnInit {
-  displayedColumns: string[] = ['week', 'demand', 'production'];
+  displayedColumns: string[] = ['week', 'demand', 'production', 'available'];
   dataToDisplay: PeriodicElement[] = [];
   dataSource = new ExampleDataSource(this.dataToDisplay);
   currentWeek: number | undefined;
   formGroup = this._ghpFormService.ghpForm;
   totalDemand$: Observable<number[]> | undefined;
+  available: number[] = [];
 
   constructor(
     private readonly _ghpFormService: GhpFormService,
@@ -26,8 +27,16 @@ export class GhpComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup.valueChanges
-      .pipe(switchMap((val) => this._ghpService.calculateGhp(val)))
-      .subscribe((val) => this._mrpService.setDemand(val));
+      .pipe(
+        tap((val) => {
+          this._mrpService.calculate(val);
+        }),
+        switchMap((val) => this._ghpService.calculateAvailable(val))
+      )
+      .subscribe((val) => {
+        // this._mrpService.setDemand(val);
+        this.available = val;
+      });
   }
 
   addData() {

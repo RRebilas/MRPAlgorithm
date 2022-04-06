@@ -1,3 +1,13 @@
-.mrp-table {
-  margin-left: 1rem;
+:host {
+  margin: 1rem;
+  width: 100%;
+}
+
+.inputs-container {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 20rem;
+  justify-content: left;
 }

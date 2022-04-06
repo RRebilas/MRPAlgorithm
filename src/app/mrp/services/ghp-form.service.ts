@@ -13,6 +13,7 @@ import {
 export class GhpFormService {
   ghpForm = this._fb.group({
     inStock: [0, Validators.min(0)],
+    czasRealizacji: [1, Validators.min(1)],
     ghpRecords: this._fb.array([]),
   });
 

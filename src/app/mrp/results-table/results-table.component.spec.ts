@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResultsTableComponent } from './results-table.component';
 
 describe('ResultsTableComponent', () => {
@@ -8,9 +8,9 @@ describe('ResultsTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ResultsTableComponent ]
-    })
-    .compileComponents();
+      declarations: [ResultsTableComponent],
+      imports: [FormsModule, ReactiveFormsModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

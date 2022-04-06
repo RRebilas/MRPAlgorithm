@@ -34,7 +34,6 @@ export class GhpComponent implements OnInit {
         switchMap((val) => this._ghpService.calculateAvailable(val))
       )
       .subscribe((val) => {
-        // this._mrpService.setDemand(val);
         this.available = val;
       });
   }
@@ -49,6 +48,7 @@ export class GhpComponent implements OnInit {
     this.dataToDisplay = [...this.dataToDisplay, element];
     this.dataSource.setData(this.dataToDisplay);
     this._ghpFormService.addGhpRecord(week);
+    this._mrpService.addNewRow$.next(week);
   }
 
   removeData() {

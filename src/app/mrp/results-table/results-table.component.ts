@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { combineLatest, debounceTime, Observable, tap } from 'rxjs';
+import { combineLatest, debounceTime, Observable } from 'rxjs';
 import { MrpRecord } from 'src/app/core/models/MrpRecord';
+import { GhpFormService } from '../services/ghp-form.service';
 import { MrpService } from '../services/mrp.service';
 
 @Component({
@@ -12,42 +13,31 @@ import { MrpService } from '../services/mrp.service';
 export class ResultsTableComponent implements OnInit {
   przewidywaneNaStanie: number[] = [];
   public form: FormGroup = this._fb.group({
-    czasRealizacji: [1, Validators.min(0)],
-    wielkoscPartii: [1, Validators.min(1)],
-    naStanie: [0, Validators.min(0)],
+    czasRealizacji: [3, Validators.min(0)],
+    wielkoscPartii: [25, Validators.min(1)],
+    naStanie: [30, Validators.min(0)],
     planowanePrzyjecia: this._fb.array([]),
   });
   dataSource$: Observable<MrpRecord[]>;
 
   constructor(
     private readonly _mrpService: MrpService,
+    private readonly _ghpFormService: GhpFormService,
     private readonly _fb: FormBuilder
   ) {
-    this.dataSource$ = this._mrpService.dataSource$.pipe(
-      tap((data) => {
-        data.map((element) => {
-          this.dodajPlanowanePrzyjecie(element.week);
-        });
-      })
-    );
+    this.dataSource$ = this._mrpService.dataSource$;
+    this._mrpService.addNewRow$.subscribe((week) => {
+      this.dodajPlanowanePrzyjecie(week);
+    });
   }
 
   ngOnInit(): void {
     const valueChange$ = this.form.valueChanges;
-    combineLatest([valueChange$, this.dataSource$])
+    const anotherValue$ = this._ghpFormService.ghpForm.valueChanges;
+
+    combineLatest([valueChange$, anotherValue$])
       .pipe(debounceTime(300))
       .subscribe((result) => {
-        // const przewidywaneNaStanie: number[] = [];
-        // const zapotrzebowanie = result[1].map(
-        //   (element) => element.grossRequirement
-        // );
-        // zapotrzebowanie.reduce((prev, curr, index) => {
-        //   const res =
-        //     prev - curr + result[0].planowanePrzyjecia[index].planowanePrzyjecia;
-        //   przewidywaneNaStanie.push(res);
-        //   return res;
-        // }, result[0].naStanie);
-        // this.przewidywaneNaStanie = przewidywaneNaStanie;
         this._mrpService.calculations(result);
       });
   }

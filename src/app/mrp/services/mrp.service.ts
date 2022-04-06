@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { MrpRecord } from 'src/app/core/models/MrpRecord';
 
 interface FormObject {
@@ -12,6 +12,7 @@ interface FormObject {
   providedIn: 'root',
 })
 export class MrpService {
+  public addNewRow$: Subject<number> = new Subject();
   private _dataSource$: BehaviorSubject<MrpRecord[]> = new BehaviorSubject(
     <MrpRecord[]>[]
   );
@@ -32,8 +33,13 @@ export class MrpService {
 
   calculate(form: FormObject) {
     this.dataSource = form.ghpRecords.map((_, index) => ({
-      week: index + 1,
-      grossRequirement: 0,
+      okres: index + 1,
+      calkowiteZapotrzebowanie: 0,
+      planowanePrzyjecia: 0,
+      przewidywaneNaStanie: 0,
+      zapotrzebowanieNetto: 0,
+      planowaneZamowienia: 0,
+      planowanePrzyjecieZamowien: 0,
     }));
 
     form.ghpRecords.forEach((el, index) => {
@@ -52,43 +58,49 @@ export class MrpService {
     if (this.dataSource[index - czasRealizacji]) {
       data = this.dataSource.map((p, idx) =>
         idx === index - czasRealizacji
-          ? { ...p, grossRequirement: zapotrzebowanie ?? 0 }
+          ? { ...p, calkowiteZapotrzebowanie: zapotrzebowanie ?? 0 }
           : p
       );
-    } else {
-      data = this.dataSource;
-      data[0].plannedOrderRelease = zapotrzebowanie;
+      this.dataSource = data;
     }
-    this.dataSource = data;
   }
 
-  calculations(result: [any, MrpRecord[]]) {
-    this.przewidywaneNaStanie(result[0].naStanie, result[0].planowanePrzyjecia);
-  }
+  calculations(forms: [any, MrpRecord[]]) {
+    const [mrp, ghp] = forms;
 
-  przewidywaneNaStanie(naStanie: number, planowanePrzyjecia: any[]) {
-    const przewidywaneNaStanie: number[] = [];
-    this.dataSource
-      .map((x) => x.grossRequirement)
-      .reduce((prev, curr, index) => {
-        const res = prev - curr + planowanePrzyjecia[index].planowanePrzyjecia;
-        przewidywaneNaStanie.push(res);
-        return res;
-      }, naStanie);
-    this.dataSource = this.dataSource.map((el, idx) => ({
-      ...el,
-      available: przewidywaneNaStanie[idx],
-    }));
-  }
-
-  planowaneZamowienia(batchSize: number = 10) {
-    const indexes = [];
-    this.dataSource
-      .map((x) => x.available)
-      .map((el, index) => {
-        if (el! < 0) {
-          indexes.push(index);
+    const rekordy: MrpRecord[] = [];
+    this.dataSource.reduce(
+      (prev, curr, index) => {
+        let przewidywaneNaStanie =
+          prev.przewidywaneNaStanie -
+          curr.calkowiteZapotrzebowanie +
+          mrp.planowanePrzyjecia[index].planowanePrzyjecia;
+        let planowanePrzyjecieZamowien;
+        if (przewidywaneNaStanie < 0 && rekordy[index - mrp.czasRealizacji]) {
+          console.log(rekordy[index - mrp.czasRealizacji]);
+          rekordy[index - mrp.czasRealizacji].planowaneZamowienia =
+            mrp.wielkoscPartii;
+          planowanePrzyjecieZamowien = mrp.wielkoscPartii;
+          przewidywaneNaStanie += mrp.wielkoscPartii;
+        } else {
         }
-      });
+        const zapotrzebowanieNetto = planowanePrzyjecieZamowien
+          ? planowanePrzyjecieZamowien - przewidywaneNaStanie
+          : 0;
+        const wynik = {
+          okres: curr.okres,
+          calkowiteZapotrzebowanie: curr.calkowiteZapotrzebowanie,
+          planowanePrzyjecia: mrp.planowanePrzyjecia[index].planowanePrzyjecia,
+          przewidywaneNaStanie,
+          zapotrzebowanieNetto,
+          planowaneZamowienia: curr.planowaneZamowienia,
+          planowanePrzyjecieZamowien: planowanePrzyjecieZamowien ?? 0,
+        };
+        rekordy.push(wynik);
+        return wynik;
+      },
+      { przewidywaneNaStanie: mrp.naStanie } as MrpRecord
+    );
+    this.dataSource = rekordy;
   }
 }
